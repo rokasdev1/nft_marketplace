@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:nft_marketplace/common/utils/int_extensions.dart';
 import 'package:nft_marketplace/presentation/pages/home_page.dart';
+import 'package:nft_marketplace/presentation/widgets/slide_button.dart';
 import 'package:slidable_button/slidable_button.dart';
 
 class StartPage extends StatelessWidget {
@@ -74,12 +75,10 @@ class StartPage extends StatelessWidget {
                     ),
                   ),
                 ),
-                HorizontalSlidableButton(
+                SlideButton(
                   width: screenSize.width - 20,
                   height: 80,
-                  buttonWidth: 200,
                   color: const Color(0xfff4b6a7),
-                  buttonColor: const Color(0xfff4b6a7),
                   label: const Center(
                     child: Text(
                       'Start Experience',
@@ -89,28 +88,21 @@ class StartPage extends StatelessWidget {
                           fontSize: 24),
                     ),
                   ),
-                  child: Row(
-                    children: [
-                      const Spacer(),
-                      Container(
-                        padding: const EdgeInsets.all(20),
-                        decoration: const ShapeDecoration(
-                          shape: CircleBorder(),
-                          color: Colors.white,
-                        ),
-                        child: const Icon(Icons.keyboard_double_arrow_right),
-                      ),
-                      5.widthBox,
-                    ],
+                  trailing: Container(
+                    padding: const EdgeInsets.all(20),
+                    decoration: const ShapeDecoration(
+                      shape: CircleBorder(),
+                      color: Colors.white,
+                    ),
+                    child: const Icon(Icons.keyboard_double_arrow_right),
                   ),
-                  onChanged: (value) {
-                    if (value == SlidableButtonPosition.end) {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => const HomePage(),
-                          ));
-                    }
+                  onMove: (details) {
+                    Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const HomePage(),
+                      ),
+                    );
                   },
                 ),
               ],
