@@ -11,12 +11,18 @@ class SlideButton extends StatefulWidget {
     required this.label,
     this.trailing,
     required this.onMove,
+    this.backgroundWidget,
+    this.movingTime,
+    this.dx,
   });
   final double? width;
   final double? height;
   final Color? color;
   final Widget label;
   final Widget? trailing;
+  final Widget? backgroundWidget;
+  final int? movingTime;
+  final double? dx;
   final Function(DragEndDetails) onMove;
 
   @override
@@ -32,19 +38,20 @@ class _SlideButtonState extends State<SlideButton>
   @override
   void initState() {
     super.initState();
-    _animationController =
-        AnimationController(vsync: this, duration: 500.milliseconds);
+    _animationController = AnimationController(
+        vsync: this,
+        duration: widget.movingTime?.milliseconds ?? 500.milliseconds,);
     _offsetAnimation =
-        Tween<Offset>(begin: Offset.zero, end: const Offset(1, 0)).animate(
-            CurvedAnimation(
-                parent: _animationController, curve: Curves.easeInOut));
+        Tween<Offset>(begin: Offset.zero, end: Offset(widget.dx ?? 1, 0))
+            .animate(CurvedAnimation(
+                parent: _animationController, curve: Curves.easeInOut,),);
     _opacityAnimation = Tween<double>(
-      begin: 1.0,
-      end: 0.0, // Fade out
+      begin: 1,
+      end: 0, // Fade out
     ).animate(CurvedAnimation(
       parent: _animationController,
       curve: Curves.easeInOut,
-    ));
+    ),);
   }
 
   @override
@@ -67,21 +74,32 @@ class _SlideButtonState extends State<SlideButton>
           color: widget.color,
           shape: const StadiumBorder(),
         ),
-        child: Row(
-          mainAxisSize: MainAxisSize.min,
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        child: Stack(
           children: [
-            16.widthBox,
-            SlideTransition(
-              position: _offsetAnimation,
-              child: FadeTransition(
-                opacity: _opacityAnimation,
-                child: widget.label,
+            if (widget.backgroundWidget != null)
+              Align(
+                child: FadeTransition(
+                  opacity: _opacityAnimation,
+                  child: widget.backgroundWidget,
+                ),
               ),
+            Row(
+              mainAxisSize: MainAxisSize.min,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                5.widthBox,
+                SlideTransition(
+                  position: _offsetAnimation,
+                  child: FadeTransition(
+                    opacity: _opacityAnimation,
+                    child: widget.label,
+                  ),
+                ),
+                const Spacer(),
+                if (widget.trailing != null) widget.trailing!,
+                5.widthBox,
+              ],
             ),
-            const Spacer(),
-            if (widget.trailing != null) widget.trailing!,
-            5.widthBox,
           ],
         ),
       ),

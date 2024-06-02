@@ -1,7 +1,10 @@
-import 'package:flutter/cupertino.dart';
+import 'dart:math';
+
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
-import 'package:nft_marketplace/common/utils/int_extensions.dart';
+import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
+import 'package:get/get_core/src/get_main.dart';
+import 'package:get/get_instance/get_instance.dart';
+import 'package:nft_marketplace/common/controllers/opensea_controller.dart';
 import 'package:nft_marketplace/presentation/widgets/filter_button.dart';
 import 'package:nft_marketplace/presentation/widgets/nft_card.dart';
 
@@ -13,6 +16,19 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  OpenseaController openseaController = Get.put(OpenseaController());
+
+  @override
+  void initState() {
+    super.initState();
+    openseaController.onInit();
+  }
+
+  String ethPrice(String currentPrice) {
+    final doublePrice = double.parse(currentPrice) / pow(10, 18);
+    return doublePrice.toStringAsFixed(3);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -23,30 +39,40 @@ class _HomePageState extends State<HomePage> {
           style: TextStyle(fontWeight: FontWeight.bold, fontSize: 36),
         ),
       ),
-      body: SingleChildScrollView(
-        child: Center(
-          child: Column(
-            children: [
-              Wrap(
-                alignment: WrapAlignment.center,
-                spacing: 16,
-                runSpacing: 16,
-                children: [
-                  const NftCard(label: 'Bored Ape\n#1', price: 0.5),
-                  FilterButton(
-                    onTap: () {},
-                  ),
-                  const NftCard(label: 'Bored Ape\n#2', price: 0.5),
-                  const NftCard(label: 'Bored Ape\n#2', price: 0.5),
-                  const NftCard(label: 'Bored Ape\n#2', price: 0.5),
-                  const NftCard(label: 'Bored Ape\n#2', price: 0.5),
-                  const NftCard(label: 'Bored Ape\n#2', price: 0.5),
-                  const NftCard(label: 'Bored Ape\n#2', price: 0.5),
-                ],
-              )
-            ],
-          ),
+      body: MasonryGridView.builder(
+        gridDelegate: const SliverSimpleGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: 2,
         ),
+        crossAxisSpacing: 15,
+        mainAxisSpacing: 15,
+        padding: const EdgeInsets.symmetric(horizontal: 15),
+        itemCount: openseaController.openseaModel != null
+            ? openseaController.openseaModel!.orders.length + 1
+            : 0,
+        itemBuilder: (context, index) {
+          final i = index > 1 ? index - 1 : index;
+          if (index == 1) {
+            return FilterButton(
+              onTap: () {},
+            );
+          }
+          print(
+            openseaController.openseaModel?.orders[i].makerAssetBundle.assets
+                    .first.imageUrl ??
+                'error',
+          );
+          return NftCard(
+            imageUrl: openseaController
+                .openseaModel?.orders[i].makerAssetBundle.assets.first.imageUrl,
+            label: openseaController
+                    .openseaModel?.orders[i].makerAssetBundle.assets.first.name
+                    .toString() ??
+                '',
+            price: ethPrice(
+              openseaController.openseaModel?.orders[i].currentPrice ?? '0',
+            ),
+          );
+        },
       ),
     );
   }

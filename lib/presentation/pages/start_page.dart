@@ -1,16 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
-import 'package:nft_marketplace/common/utils/int_extensions.dart';
 import 'package:nft_marketplace/presentation/pages/home_page.dart';
 import 'package:nft_marketplace/presentation/widgets/slide_button.dart';
-import 'package:slidable_button/slidable_button.dart';
 
 class StartPage extends StatelessWidget {
   const StartPage({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final Size screenSize = MediaQuery.of(context).size;
+    final screenSize = MediaQuery.of(context).size;
     return Scaffold(
       backgroundColor: Colors.white,
       body: Column(
@@ -61,7 +58,7 @@ class StartPage extends StatelessWidget {
                   'Discover NFT\ncollections',
                   textAlign: TextAlign.center,
                   style: TextStyle(
-                      fontSize: 40, fontFamily: 'AtypBold', height: 1.1),
+                      fontSize: 40, fontFamily: 'AtypBold', height: 1.1,),
                 ),
                 SizedBox(
                   width: screenSize.width / 1.2,
@@ -80,12 +77,15 @@ class StartPage extends StatelessWidget {
                   height: 80,
                   color: const Color(0xfff4b6a7),
                   label: const Center(
-                    child: Text(
-                      'Start Experience',
-                      style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          color: Colors.white,
-                          fontSize: 24),
+                    child: Padding(
+                      padding: EdgeInsets.only(left: 10),
+                      child: Text(
+                        'Start Experience',
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white,
+                            fontSize: 24,),
+                      ),
                     ),
                   ),
                   trailing: Container(

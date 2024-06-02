@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
 import 'package:get/get_navigation/src/root/get_material_app.dart';
+import 'package:nft_marketplace/common/controllers/opensea_controller.dart';
 import 'package:nft_marketplace/presentation/pages/start_page.dart';
 
 void main() {
@@ -14,6 +17,14 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
+  OpenseaController openseaController = Get.put(OpenseaController());
+
+  @override
+  void initState() {
+    super.initState();
+    openseaController.onInit();
+  }
+
   @override
   Widget build(BuildContext context) {
     return GetMaterialApp(

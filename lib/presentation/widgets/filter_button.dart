@@ -24,7 +24,7 @@ class FilterButton extends StatelessWidget {
               style: TextStyle(
                   fontWeight: FontWeight.bold,
                   fontSize: 20,
-                  color: Colors.white),
+                  color: Colors.white,),
             ),
             Container(
               padding: const EdgeInsets.all(20),
